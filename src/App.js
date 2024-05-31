@@ -1,63 +1,28 @@
-// App.jsx / App.tsx
+// App.js
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import EditorPage from "./components/EditorPage";
+import BlogsPage from "./components/BlogsPage";
+import EditPage from "./components/EditPage";
 
-import React, { Component } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import MyCustomUploadAdapterPlugin from "./utils/MyUploadAdapter";
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorData: "<p>Hello from CKEditor&nbsp;5!</p>",
-    };
-  }
-
-  render() {
-    return (
+function App() {
+  return (
+    <Router>
       <div className="App">
-        <h2>Using CKEditor&nbsp;5 build in React</h2>
-        <CKEditor
-          editor={ClassicEditor}
-          data={this.state.editorData}
-          onReady={(editor) => {
-            // You can store the "editor" and use when it is needed.
-            console.log("Editor is ready to use!", editor);
-          }}
-          config={{
-            extraPlugins: [MyCustomUploadAdapterPlugin],
-            image: {
-              toolbar: [
-                "imageStyle:alignLeft",
-                "imageStyle:full",
-                "imageStyle:alignRight",
-                "|",
-                "imageResize",
-                "|",
-                "imageTextAlternative",
-              ],
-              styles: ["full", "alignLeft", "alignRight"],
-            },
-          }}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            this.setState({ editorData: data });
-            console.log({ event, editor, data });
-          }}
-          onBlur={(event, editor) => {
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log("Focus.", editor);
-          }}
-        />
-        <div className="editor-output">
-          <h3>Generated HTML</h3>
-          <div dangerouslySetInnerHTML={{ __html: this.state.editorData }} />
-        </div>
+        <nav>
+          <ul>
+            <li><Link to="/">Editor</Link></li>
+            <li><Link to="/blogs">Blogs</Link></li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path="/" element={<EditorPage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/edit/:id" element={<EditPage />} />
+        </Routes>
       </div>
-    );
-  }
+    </Router>
+  );
 }
 
 export default App;
