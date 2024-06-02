@@ -1,10 +1,11 @@
+// components/EditPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { db, serverTimestamp, imageDb } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Add these imports
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import MyCustomUploadAdapterPlugin from "../utils/MyUploadAdapter";
 
 const EditPage = () => {
@@ -75,47 +76,54 @@ const EditPage = () => {
   };
 
   return (
-    <div className="App">
-      <h2>Edit Blog</h2>
-      <CKEditor
-        editor={ClassicEditor}
-        data={editorData}
-        onReady={(editor) => {
-          console.log("Editor is ready to use!", editor);
-          MyCustomUploadAdapterPlugin(editor, handleImageUpload);
-        }}
-        config={{
-          extraPlugins: [MyCustomUploadAdapterPlugin],
-          image: {
-            toolbar: [
-              "imageStyle:alignLeft",
-              "imageStyle:full",
-              "imageStyle:alignRight",
-              "|",
-              "imageResize",
-              "|",
-              "imageTextAlternative",
-            ],
-            styles: ["full", "alignLeft", "alignRight"],
-          },
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          setEditorData(data);
-          console.log("Editor data changed:", data);
-        }}
-        onBlur={(event, editor) => {
-          console.log("Blur.", editor);
-        }}
-        onFocus={(event, editor) => {
-          console.log("Focus.", editor);
-        }}
-      />
-      <div className="editor-output">
-        <h3>Generated HTML</h3>
-        <div dangerouslySetInnerHTML={{ __html: editorData }} />
+    <div className="container my-5">
+      <div className="card shadow">
+        <div className="card-body">
+          <h2 className="card-title mb-4">Edit Blog</h2>
+          <CKEditor
+            editor={ClassicEditor}
+            data={editorData}
+            onReady={(editor) => {
+              console.log("Editor is ready to use!", editor);
+              MyCustomUploadAdapterPlugin(editor, handleImageUpload);
+            }}
+            config={{
+              extraPlugins: [MyCustomUploadAdapterPlugin],
+              image: {
+                toolbar: [
+                  "imageStyle:alignLeft",
+                  "imageStyle:full",
+                  "imageStyle:alignRight",
+                  "|",
+                  "imageResize",
+                  "|",
+                  "imageTextAlternative",
+                ],
+                styles: ["full", "alignLeft", "alignRight"],
+              },
+            }}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setEditorData(data);
+              console.log("Editor data changed:", data);
+            }}
+            onBlur={(event, editor) => {
+              console.log("Blur.", editor);
+            }}
+            onFocus={(event, editor) => {
+              console.log("Focus.", editor);
+            }}
+          />
+          <div className="editor-output mt-4">
+            <h3>Generated HTML</h3>
+            <div className="border p-3 bg-light" dangerouslySetInnerHTML={{ __html: editorData }} />
+          </div>
+          <div className="mt-4 d-flex justify-content-between">
+            <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
+            <button className="btn btn-secondary" onClick={() => navigate('/blogs')}>Cancel</button>
+          </div>
+        </div>
       </div>
-      <button onClick={handleSubmit}>Save</button>
     </div>
   );
 };

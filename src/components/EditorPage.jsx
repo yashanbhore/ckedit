@@ -80,47 +80,51 @@ class EditorPage extends Component {
 
   render() {
     return (
-      <div className="App">
-        <h2>Using CKEditor&nbsp;5 build in React</h2>
-        <CKEditor
-          editor={ClassicEditor}
-          data={this.state.editorData}
-          onReady={(editor) => {
-            console.log("Editor is ready to use!", editor);
-            MyCustomUploadAdapterPlugin(editor, this.handleImageUpload);
-          }}
-          config={{
-            extraPlugins: [MyCustomUploadAdapterPlugin],
-            image: {
-              toolbar: [
-                "imageStyle:alignLeft",
-                "imageStyle:full",
-                "imageStyle:alignRight",
-                "|",
-                "imageResize",
-                "|",
-                "imageTextAlternative",
-              ],
-              styles: ["full", "alignLeft", "alignRight"],
-            },
-          }}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            this.setState({ editorData: data });
-            console.log("Editor data changed:", data);
-          }}
-          onBlur={(event, editor) => {
-            console.log("Blur.", editor);
-          }}
-          onFocus={(event, editor) => {
-            console.log("Focus.", editor);
-          }}
-        />
-        <div className="editor-output">
-          <h3>Generated HTML</h3>
-          <div dangerouslySetInnerHTML={{ __html: this.state.editorData }} />
+      <div className="container my-5">
+        <div className="card shadow">
+          <div className="card-body">
+            <h2 className="card-title mb-4">Using CKEditor 5 build in React</h2>
+            <CKEditor
+              editor={ClassicEditor}
+              data={this.state.editorData}
+              onReady={(editor) => {
+                console.log("Editor is ready to use!", editor);
+                MyCustomUploadAdapterPlugin(editor, this.handleImageUpload);
+              }}
+              config={{
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                image: {
+                  toolbar: [
+                    "imageStyle:alignLeft",
+                    "imageStyle:full",
+                    "imageStyle:alignRight",
+                    "|",
+                    "imageResize",
+                    "|",
+                    "imageTextAlternative",
+                  ],
+                  styles: ["full", "alignLeft", "alignRight"],
+                },
+              }}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                this.setState({ editorData: data });
+                console.log("Editor data changed:", data);
+              }}
+              onBlur={(event, editor) => {
+                console.log("Blur.", editor);
+              }}
+              onFocus={(event, editor) => {
+                console.log("Focus.", editor);
+              }}
+            />
+            <div className="editor-output mt-4">
+              <h3>Generated HTML</h3>
+              <div className="border p-3 bg-light" dangerouslySetInnerHTML={{ __html: this.state.editorData }} />
+            </div>
+            <button className="btn btn-primary mt-4" onClick={this.handleSubmit}>Submit</button>
+          </div>
         </div>
-        <button onClick={this.handleSubmit}>Submit</button>
       </div>
     );
   }
